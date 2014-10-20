@@ -23,10 +23,14 @@ module OmniAuth
       def request_phase
         params = {
           :api_key => options.api_key,
-          :cb      => options.client_options["callback"]
+          :cb      => callback_url
         }
         query_string = params.map{ |key,value| "#{key}=#{value}" }.join("&")
         redirect "#{options.client_options.site}#{options.client_options.authorize_path}/?#{query_string}"
+      end
+
+      def callback_url
+        options.client_options["callback"] || options[:callback_url] || super
       end
 
       def callback_phase
